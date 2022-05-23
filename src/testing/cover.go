@@ -120,5 +120,5 @@ func coverReport() {
 		fmt.Println("coverage: [no statements]")
 		return
 	}
-	fmt.Printf("coverage: %.1f%% of statements%s\n", 100*float64(active)/float64(total), cover.CoveredPackages)
+	fmt.Printf("coverage: %.1f%% of statements (%d/%d) %s\n", 100*float64(active)/float64(total), active, total, cover.CoveredPackages)
 }

@@ -1415,6 +1415,10 @@ func (c *common) runCleanup(ph panicHandling) (panicVal any) {
 		}()
 	}
 
+	if os.Getenv("SKIP_CLEANUP") == "true" {
+		return nil
+	}
+
 	// Make sure that if a cleanup function panics,
 	// we still run the remaining cleanup functions.
 	defer func() {

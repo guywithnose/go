@@ -92,16 +92,20 @@ func coverReport() {
 		defer func() { mustBeNil(f.Close()) }()
 	}
 
-	var active, total int64
+	var active, total, factive, ftotal int64
 	var count uint32
 	for name, counts := range cover.Counters {
+		factive = 0
+		ftotal = 0
 		blocks := cover.Blocks[name]
 		for i := range counts {
 			stmts := int64(blocks[i].Stmts)
 			total += stmts
+			ftotal += stmts
 			count = atomic.LoadUint32(&counts[i]) // For -mode=atomic.
 			if count > 0 {
 				active += stmts
+				factive += stmts
 			}
 			if f != nil {
 				_, err := fmt.Fprintf(f, "%s:%d.%d,%d.%d %d %d\n", name,
@@ -111,6 +115,10 @@ func coverReport() {
 					count)
 				mustBeNil(err)
 			}
+		}
+
+		if chatty.on && ftotal > 0 {
+			fmt.Printf("%s: covered %d, uncovered %d (%.1f%%)\n", name, factive, ftotal-factive, 100*float64(factive)/float64(ftotal))
 		}
 	}
 	if total == 0 {

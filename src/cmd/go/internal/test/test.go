@@ -692,12 +692,6 @@ func runTest(ctx context.Context, cmd *base.Command, args []string) {
 		base.Fatalf("no packages to test")
 	}
 
-	if testC && len(pkgs) != 1 {
-		base.Fatalf("cannot use -c flag with multiple packages")
-	}
-	if testO != "" && len(pkgs) != 1 {
-		base.Fatalf("cannot use -o flag with multiple packages")
-	}
 	if testFuzz != "" {
 		if !platform.FuzzSupported(cfg.Goos, cfg.Goarch) {
 			base.Fatalf("-fuzz flag is not supported on %s/%s", cfg.Goos, cfg.Goarch)

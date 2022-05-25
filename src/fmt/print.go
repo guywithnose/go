@@ -905,6 +905,10 @@ func (p *pp) printValue(value reflect.Value, verb rune, depth int) {
 			p.buf.writeByte('}')
 		} else {
 			p.buf.writeByte('[')
+			if value.Kind() == reflect.Slice && f.IsNil() && os.Getenv("SHOW_NIL_SLICES") == "true" {
+				p.buf.writeString(nilAngleString)
+			}
+
 			for i := 0; i < f.Len(); i++ {
 				if i > 0 {
 					p.buf.writeByte(' ')
